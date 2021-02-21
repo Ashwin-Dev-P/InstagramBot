@@ -1,0 +1,9 @@
+SAVE_CHOICE = False
+NOTIFY_CHOICE = False
+
+FOLLOW_CHOICE = True
+LIKE_POST_CHOICE = False
+TARGET_ACCOUNT_USERNAME = "selenagomez"
+NUMBER_OF_POSTS = 2
+
+FOLLOWING_ACCOUNT_USERNAME_LIST = ['selenagomez','justinbieber']
