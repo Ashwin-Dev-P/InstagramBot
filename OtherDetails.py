@@ -1,9 +1,15 @@
 SAVE_CHOICE = False
 NOTIFY_CHOICE = False
 
-FOLLOW_CHOICE = True
+FOLLOW_CHOICE = False
+FOLLOWING_ACCOUNT_USERNAME_LIST = []
+
 LIKE_POST_CHOICE = False
 TARGET_ACCOUNT_USERNAME = "selenagomez"
-NUMBER_OF_POSTS = 2
+NUMBER_OF_POSTS = 3
 
-FOLLOWING_ACCOUNT_USERNAME_LIST = ['selenagomez','justinbieber']
+MESSAGE_CHOICE = True
+GROUP_CHAT_CHOICE = False
+MESSAGE_USER_TARGET = ["selenagomez","willsmith","justinbeiber"]
+MY_MESSAGE = "hi"
+

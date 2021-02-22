@@ -1,4 +1,4 @@
-import pyautogui
+import pyautogui,time
 
 def login(driver,MYUSERNAME,MYPASSWORD):
     driver.implicitly_wait(10)
@@ -45,6 +45,12 @@ def TurnOnNotificationPopUp(driver,choice):
         print("Turn on notifications did not pop up.")
         return False
     
+def type(driver,word):
+    driver.implicitly_wait(10)
+    for i in word:
+        pyautogui.press(i)
+    print("Typing...")
+    
 def search_bar(driver,myInput):
     #Clicking the search bar
     search_bar = driver.find_element_by_xpath("//*[name()='span'][@class='TqC_a']")
@@ -53,10 +59,7 @@ def search_bar(driver,myInput):
     print("Bar clicked")
     
     #Typing in the search bar
-    driver.implicitly_wait(5)
-    for i in myInput:
-        pyautogui.press(i)
-    print("Typing input...")
+    type(driver,myInput)
     
     #Clicking the first account
     account = driver.find_element_by_xpath("/html/body/div[1]/section/nav/div[2]/div/div/div[2]/div[3]/div/div[2]/div/div[1]/a/div")
@@ -72,7 +75,7 @@ def Like_Post(driver,choice,TARGET_ACCOUNT_USERNAME,n):
     if(choice and n>0):
         #Go to the required account.
         #driver.get(WEBSITE_LINK+TARGET_ACCOUNT_USERNAME+"/")
-        search_bar(TARGET_ACCOUNT_USERNAME)
+        search_bar(driver,TARGET_ACCOUNT_USERNAME)
 
         driver.implicitly_wait(6)
         number_of_posts = driver.find_element_by_class_name('g47SY ')
@@ -156,4 +159,119 @@ def follow(driver,choice,WEBSITE_LINK,FOLLOWING_ACCOUNT_USERNAME_LIST):
                     print("Already following")
                 except:
                     print("Error occured trying to follow the account.")
-
+  
+def new_message(driver):
+    driver.implicitly_wait(10)
+    try:
+        Send_message_button = driver.find_element_by_xpath("//*[name()='svg'][@aria-label='New Message']")
+        print("New message button found.")
+    except:
+        try:
+            Send_message_button = driver.find_element_by_xpath("//*[name()='button'][@class='sqdOP  L3NKy   y3zKF     ']")
+            print("Send message button 2 found.")
+        except:
+            print("Send message button not found.")
+    
+    
+    driver.implicitly_wait(10)
+    Send_message_button.click()
+    print("New message button clicked.")
+    
+    
+    #Clearing and selecting query box.
+    driver.implicitly_wait(10)
+    queryBox = driver.find_element_by_name('queryBox')
+    print('query box found.')
+    queryBox.click()
+    print('query box clicked.')
+    queryBox.clear()
+    print('query box cleared.')
+    
+def next(driver):
+    driver.implicitly_wait(10)
+    Next = driver.find_element_by_xpath("//*[name()='button'][@class='sqdOP yWX7d    y3zKF   cB_4K  ']")
+    Next.click()
+    
+def send_message(driver,message):
+    time.sleep(2)
+    driver.implicitly_wait(10)
+    message_textarea = driver.find_element_by_tag_name('textarea')
+    
+    #message_textarea = driver.find_element_by_xpath('//*input[@placeholder="Message..." and not(@disabled)]')
+    print("message area found")
+    message_textarea.click()
+    print("message area clicked")
+    message_textarea.clear()
+    print("message area ready.")
+    
+    type(driver,message)
+    
+    pyautogui.press('enter')
+    
+                        
+def message(driver,choice,group_chat,user_list,message):
+    if(choice):
+        
+        #Click the message tab button
+        driver.implicitly_wait(10)
+        try:
+            messenger_button = driver.find_element_by_xpath("//*[name()='svg'][@aria-label='Direct']")
+            print("Messenger svg found")
+        except:
+            print("Messenger svg not found")
+        
+        messenger_button.click()
+        print('Messenger svg clicked.')
+        
+        #Click new message button
+        new_message(driver)
+        
+        
+        
+        if(group_chat):
+            for user in user_list:
+                type(driver,user)
+                driver.implicitly_wait(10)
+                try:
+                    #The xpath is obtained by inspecting the exactly on the username
+                    first_account = driver.find_element_by_xpath('/html/body/div[5]/div/div/div[2]/div[2]/div[1]/div/div[2]/div[1]/div/div')
+                    print('Top account found')
+                    
+                    driver.implicitly_wait(10)
+                    first_account.click()
+                    print('Top account clicked')
+                except:
+                    print("Account of the username "+user+" not found.")
+                    
+            next(driver)
+            
+            send_message(driver,message)
+            print('Group message sent')
+              
+        else:
+            for user in user_list:
+                type(driver,user)
+                
+                driver.implicitly_wait(10)
+                try:
+                    #The xpath is obtained by inspecting the exactly on the username
+                    first_account = driver.find_element_by_xpath('/html/body/div[5]/div/div/div[2]/div[2]/div[1]/div/div[2]/div[1]/div/div')
+                    print('Top account found')
+                    
+                    driver.implicitly_wait(10)
+                    first_account.click()
+                    print('Top account clicked')
+                except:
+                    print("Account of the username "+user+" not found.")
+                
+                
+                next(driver)
+                print('next button clicked.')
+                
+                send_message(driver,message)
+                print('Private message sent')
+                
+                new_message(driver)
+            
+        
+        

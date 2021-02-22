@@ -6,6 +6,8 @@ from myFunctionsAshwin import *
 import time
 import pyautogui
 
+
+
 #Variables and constants
 LOGIN_LINK = "http://instagram.com/accounts/login"
 WEBSITE_LINK = "http://instagram.com/"
@@ -40,7 +42,10 @@ try:
     
     #Follow People from the input list.
     follow(driver,FOLLOW_CHOICE,WEBSITE_LINK,FOLLOWING_ACCOUNT_USERNAME_LIST)
-    
+    try:
+        message(driver,MESSAGE_CHOICE,GROUP_CHAT_CHOICE,MESSAGE_USER_TARGET,MY_MESSAGE)
+    except:
+        print("Message error.")
     
 except:
     print("Some error occured.")

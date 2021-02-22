@@ -1,2 +1,2 @@
-MYUSERNAME = "Ashwin_Dev_14_"
+MYUSERNAME = "8056150426"
 MYPASSWORD = "Ashwin@14instagram"
