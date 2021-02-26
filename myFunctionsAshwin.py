@@ -187,6 +187,32 @@ def follow(driver,choice,WEBSITE_LINK,FOLLOWING_ACCOUNT_USERNAME_LIST):
                     print("Already following")
                 except:
                     print("Error occured trying to follow the account.")
+                    
+def follow_random(driver,follow_choice,target_account):
+    if(follow_choice):
+        search_bar(driver,target_account)
+        driver.find_element_by_xpath('/html/body/div[1]/section/main/div/header/section/ul/li[2]').click()
+        
+        #popup = driver.find_element_by_xpath("//*[name()='div'][@role='dialog']")
+        
+        #Popup without heading
+        popup = driver.find_element_by_xpath("//*[name()='div'][@class='isgrP']")
+        
+        popup = driver.find_element_by_xpath("/html/body/div[5]/div/div/div[2]")
+        print('popup found')
+        
+        last_ht,ht =0,1
+        while last_ht != ht:
+            last_ht = ht
+            time.sleep(1)
+            print("Script about start")
+            ht = driver.execute_script("""
+                arguments[0].scrollTo(0,arguments[0].scrollHeight);
+                return arguments[0].scrollHeight;
+                                       """,popup) 
+            button = driver.find_element_by_xpath("//*[name()='div'][@class='Pkbci']")
+            print("button found.")
+            print("script executed")       
   
 def new_message(driver):
     driver.implicitly_wait(10)

@@ -42,6 +42,7 @@ try:
     
     #Follow People from the input list.
     follow(driver,FOLLOW_CHOICE,WEBSITE_LINK,FOLLOWING_ACCOUNT_USERNAME_LIST)
+    follow_random(driver,random_follow_choice,follow_random_target_account)
     
     #Message
     message(driver,MESSAGE_CHOICE,GROUP_CHAT_CHOICE,MESSAGE_USER_TARGET,MY_MESSAGE)
@@ -55,6 +56,7 @@ try:
 except:
     print("Some error occured.")
 
+#TODO: To find people you are following but do not follow you back.
 
 #driver.quit()
 print("Driver quit.")
