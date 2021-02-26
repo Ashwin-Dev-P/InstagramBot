@@ -8,8 +8,10 @@ LIKE_POST_CHOICE = False
 TARGET_ACCOUNT_USERNAME = "selenagomez"
 NUMBER_OF_POSTS = 3
 
-MESSAGE_CHOICE = True
+MESSAGE_CHOICE = False
 GROUP_CHAT_CHOICE = False
-MESSAGE_USER_TARGET = ["selenagomez","willsmith","justinbeiber"]
+MESSAGE_USER_TARGET = ["selenagomez"]
 MY_MESSAGE = "hi"
+
+my_sleep_time = 2
 

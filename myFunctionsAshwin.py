@@ -1,7 +1,10 @@
 import pyautogui,time
+from selenium.webdriver.common.keys import Keys
 
 def login(driver,MYUSERNAME,MYPASSWORD):
     driver.implicitly_wait(10)
+    #pyautogui.press('win')
+    pyautogui.hotkey('win', 'up')
 
     username= driver.find_element_by_name('username')
     username.clear()
@@ -18,6 +21,7 @@ def login(driver,MYUSERNAME,MYPASSWORD):
     driver.find_element_by_css_selector('button[type=submit]').click()
 
 def SaveInfo(driver,choice):
+    time.sleep(3)
     try:
         driver.implicitly_wait(10)
         if(choice):
@@ -32,6 +36,7 @@ def SaveInfo(driver,choice):
         return False
 
 def TurnOnNotificationPopUp(driver,choice):
+    time.sleep(3)
     try:
         driver.implicitly_wait(10)
         if(choice):
@@ -46,6 +51,7 @@ def TurnOnNotificationPopUp(driver,choice):
         return False
     
 def type(driver,word):
+    time.sleep(3)
     driver.implicitly_wait(10)
     for i in word:
         pyautogui.press(i)
@@ -116,6 +122,7 @@ def Like_Post(driver,choice,TARGET_ACCOUNT_USERNAME,n):
                 while(i<n):
                     driver.implicitly_wait(10)
                     try:
+                        time.sleep(3)
                         l = driver.find_element_by_xpath("//*[name()='svg'][@aria-label='Like']")
                         print('Like button found')
                         l.click()
@@ -151,6 +158,7 @@ def follow(driver,choice,WEBSITE_LINK,FOLLOWING_ACCOUNT_USERNAME_LIST):
             try:
                 follow_buton = driver.find_element_by_xpath("//*[name()='button'][@class='_5f5mN       jIbKX  _6VtSN     yZn4P   ']")
                 print('button found')
+                time.sleep(2)
                 follow_buton.click()
                 print("Follow button clicked.")
             except:
@@ -207,6 +215,19 @@ def send_message(driver,message):
     type(driver,message)
     
     pyautogui.press('enter')
+    
+def close_message(driver):
+    time.sleep(3)
+    driver.implicitly_wait(10)
+    try:
+        close = driver.find_element_by_xpath("//*[name()='svg'][@aria-label='Close']")
+    except:
+        print("close button not found.")
+
+    print("Close button found.")
+    close.click()
+    print("Closed.")
+    
     
                         
 def message(driver,choice,group_chat,user_list,message):
@@ -272,6 +293,34 @@ def message(driver,choice,group_chat,user_list,message):
                 print('Private message sent')
                 
                 new_message(driver)
+        close_message(driver)
+        
+def logout(driver):
+    account_button = driver.find_element_by_xpath("//*[name()='span'][@class='_2dbep qNELH']")
+    print("account button found")
+    account_button.click()
+    print("account button clicked")
+    
+    time.sleep(2)
+    driver.implicitly_wait(10)
+    logout_button = driver.find_element_by_xpath("/html/body/div[1]/section/nav/div[2]/div/div/div[3]/div/div[5]/div[2]/div[2]/div[2]/div[2]/div")
+    print("logout button found")
+    logout_button.click()
+    print("logout button clicked")
+    
+def open_new_tab(driver):
+    time.wait(2)
+    driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + 't') 
+    #pyautogui.hotkey('ctrl','t')
+    
+def close_tab(driver):
+    time.wait(2)
+    pyautogui.hotkey('ctrl','w')
+    
+def previous_tab(driver):
+    time.wait(2)
+    pyautogui.hotkey('ctrl','shift','tab')
+    
             
         
         

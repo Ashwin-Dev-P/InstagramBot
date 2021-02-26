@@ -42,10 +42,16 @@ try:
     
     #Follow People from the input list.
     follow(driver,FOLLOW_CHOICE,WEBSITE_LINK,FOLLOWING_ACCOUNT_USERNAME_LIST)
-    try:
-        message(driver,MESSAGE_CHOICE,GROUP_CHAT_CHOICE,MESSAGE_USER_TARGET,MY_MESSAGE)
-    except:
-        print("Message error.")
+    
+    #Message
+    message(driver,MESSAGE_CHOICE,GROUP_CHAT_CHOICE,MESSAGE_USER_TARGET,MY_MESSAGE)
+    logout(driver)
+    
+    open_new_tab(driver)
+    #previous_tab(driver)
+    #close_tab(driver)
+    ##close_tab(driver)
+    
     
 except:
     print("Some error occured.")
