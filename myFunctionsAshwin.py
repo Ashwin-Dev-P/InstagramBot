@@ -1,14 +1,15 @@
 import pyautogui,time
 from selenium.webdriver.common.keys import Keys
+from OtherDetails import my_sleep_time 
 
 def login(driver,MYUSERNAME,MYPASSWORD):
     driver.implicitly_wait(10)
-    #pyautogui.press('win')
     pyautogui.hotkey('win', 'up')
 
     username= driver.find_element_by_name('username')
     username.clear()
     username.click()
+    
     for i in MYUSERNAME:
        pyautogui.press(i)
     
@@ -21,7 +22,7 @@ def login(driver,MYUSERNAME,MYPASSWORD):
     driver.find_element_by_css_selector('button[type=submit]').click()
 
 def SaveInfo(driver,choice):
-    time.sleep(3)
+    time.sleep(my_sleep_time)
     try:
         driver.implicitly_wait(10)
         if(choice):
@@ -36,7 +37,7 @@ def SaveInfo(driver,choice):
         return False
 
 def TurnOnNotificationPopUp(driver,choice):
-    time.sleep(3)
+    time.sleep(my_sleep_time)
     try:
         driver.implicitly_wait(10)
         if(choice):
@@ -51,7 +52,7 @@ def TurnOnNotificationPopUp(driver,choice):
         return False
     
 def type(driver,word):
-    time.sleep(3)
+    time.sleep(my_sleep_time)
     driver.implicitly_wait(10)
     for i in word:
         pyautogui.press(i)
@@ -80,7 +81,15 @@ def search_bar(driver,myInput):
 def Like_Post(driver,choice,TARGET_ACCOUNT_USERNAME,n):
     if(choice and n>0):
         #Go to the required account.
-        #driver.get(WEBSITE_LINK+TARGET_ACCOUNT_USERNAME+"/")
+        hash = '#'
+        hash_tag = True
+        
+        if(TARGET_ACCOUNT_USERNAME.find(hash) == -1):
+            hash_tag = False
+        
+            
+        
+        
         search_bar(driver,TARGET_ACCOUNT_USERNAME)
 
         driver.implicitly_wait(6)
@@ -92,6 +101,7 @@ def Like_Post(driver,choice,TARGET_ACCOUNT_USERNAME,n):
             if(number_of_posts > 0):
                 post_available = True
         except:
+            number_of_posts = n
             print("Unable to convert no. of post from text to integer.")
 
         
@@ -100,7 +110,11 @@ def Like_Post(driver,choice,TARGET_ACCOUNT_USERNAME,n):
             #Click on the first post.
             driver.implicitly_wait(3)
             try:
-                driver.find_element_by_xpath('/html/body/div[1]/section/main/div/div[3]/article/div[1]/div/div[1]/div[1]').click()
+                if(not hash_tag):
+                    driver.find_element_by_xpath('/html/body/div[1]/section/main/div/div[3]/article/div[1]/div/div[1]/div[1]').click()
+                else:
+                    print("trying to click the hash tag first post.")
+                    driver.find_element_by_xpath("//*[name()='div'][@class='eLAPa']").click()
                 print('First post clicked 1')
                 post_available = True
             except:
@@ -110,7 +124,7 @@ def Like_Post(driver,choice,TARGET_ACCOUNT_USERNAME,n):
                     post_available = True
                     
                 except:
-                    print("No posts available.")
+                    print("No posts available1.")
                     post_available = False
             
             #Like if the first post is available.
@@ -123,10 +137,15 @@ def Like_Post(driver,choice,TARGET_ACCOUNT_USERNAME,n):
                     driver.implicitly_wait(10)
                     try:
                         time.sleep(3)
-                        l = driver.find_element_by_xpath("//*[name()='svg'][@aria-label='Like']")
-                        print('Like button found')
-                        l.click()
-                        print("Like button clicked.")
+                        
+                        #Find if the post is liked already by searching for like button.
+                        try:
+                            ul = driver.find_element_by_xpath("//*[name()='svg'][@aria-label='Unlike']")
+                            print('Unlike button found so post liked already.')
+                        except:
+                            l = driver.find_element_by_xpath("//*[name()='svg'][@aria-label='Like']")
+                            l.click()
+                            print("Like button clicked.")
                     except:
                         print("Like button not found.")
 
@@ -138,6 +157,7 @@ def Like_Post(driver,choice,TARGET_ACCOUNT_USERNAME,n):
                         driver.find_element_by_xpath("/html/body/div[5]/div[1]/div/div/a[2]").click()
                                                 
                     i+=1
+                close_button(driver)
             
             
         else:
@@ -158,7 +178,7 @@ def follow(driver,choice,WEBSITE_LINK,FOLLOWING_ACCOUNT_USERNAME_LIST):
             try:
                 follow_buton = driver.find_element_by_xpath("//*[name()='button'][@class='_5f5mN       jIbKX  _6VtSN     yZn4P   ']")
                 print('button found')
-                time.sleep(2)
+                time.sleep(my_sleep_time)
                 follow_buton.click()
                 print("Follow button clicked.")
             except:
@@ -201,7 +221,7 @@ def next(driver):
     Next.click()
     
 def send_message(driver,message):
-    time.sleep(2)
+    time.sleep(my_sleep_time)
     driver.implicitly_wait(10)
     message_textarea = driver.find_element_by_tag_name('textarea')
     
@@ -216,8 +236,8 @@ def send_message(driver,message):
     
     pyautogui.press('enter')
     
-def close_message(driver):
-    time.sleep(3)
+def close_button(driver):
+    time.sleep(my_sleep_time)
     driver.implicitly_wait(10)
     try:
         close = driver.find_element_by_xpath("//*[name()='svg'][@aria-label='Close']")
@@ -293,7 +313,7 @@ def message(driver,choice,group_chat,user_list,message):
                 print('Private message sent')
                 
                 new_message(driver)
-        close_message(driver)
+        close_button(driver)
         
 def logout(driver):
     account_button = driver.find_element_by_xpath("//*[name()='span'][@class='_2dbep qNELH']")
@@ -301,7 +321,7 @@ def logout(driver):
     account_button.click()
     print("account button clicked")
     
-    time.sleep(2)
+    time.sleep(my_sleep_time)
     driver.implicitly_wait(10)
     logout_button = driver.find_element_by_xpath("/html/body/div[1]/section/nav/div[2]/div/div/div[3]/div/div[5]/div[2]/div[2]/div[2]/div[2]/div")
     print("logout button found")
@@ -309,17 +329,26 @@ def logout(driver):
     print("logout button clicked")
     
 def open_new_tab(driver):
-    time.wait(2)
-    driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + 't') 
-    #pyautogui.hotkey('ctrl','t')
-    
-def close_tab(driver):
-    time.wait(2)
-    pyautogui.hotkey('ctrl','w')
+    print("Opening new tab")
+    try:
+        pyautogui.hotkey('ctrl','t')
+        print("Trying to open new tab using 'Ctrl + t'.")
+        
+    except:
+        print("Unable to open new tab.")
     
 def previous_tab(driver):
-    time.wait(2)
+    print("Shifting to previous tab")
     pyautogui.hotkey('ctrl','shift','tab')
+    print("Shifted to previous tab.")
+    
+def close_tab(driver):
+    pyautogui.hotkey('ctrl','w')
+    print("Tab closed.")
+    
+def close_window(driver):
+    pyautogui.hotkey('alt','f4')
+    print("Browser closed.")
     
             
         

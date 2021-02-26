@@ -45,17 +45,17 @@ try:
     
     #Message
     message(driver,MESSAGE_CHOICE,GROUP_CHAT_CHOICE,MESSAGE_USER_TARGET,MY_MESSAGE)
-    logout(driver)
-    
-    open_new_tab(driver)
+    #logout(driver)
+    #open_new_tab(driver)
     #previous_tab(driver)
     #close_tab(driver)
-    ##close_tab(driver)
-    
+    #close_tab(driver)
+    #close_window(driver)
     
 except:
     print("Some error occured.")
 
-#driver.close()
+
 #driver.quit()
+print("Driver quit.")
 exit()
