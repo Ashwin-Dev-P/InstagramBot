@@ -6,7 +6,8 @@ FOLLOW_CHOICE = False
 FOLLOWING_ACCOUNT_USERNAME_LIST = []
 
 random_follow_choice = True
-follow_random_target_account = 'cristiano'
+follow_random_target_account = 'instagram'
+follow_amount = 10
 
 #Liking account posts
 LIKE_POST_CHOICE = False

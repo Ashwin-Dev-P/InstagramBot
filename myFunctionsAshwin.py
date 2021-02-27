@@ -1,8 +1,10 @@
 import pyautogui,time
 from selenium.webdriver.common.keys import Keys
 from OtherDetails import my_sleep_time 
+from selenium.webdriver.common.by import By
 
 def login(driver,MYUSERNAME,MYPASSWORD):
+    
     driver.implicitly_wait(10)
     pyautogui.hotkey('win', 'up')
 
@@ -11,7 +13,7 @@ def login(driver,MYUSERNAME,MYPASSWORD):
     username.click()
     
     for i in MYUSERNAME:
-       pyautogui.press(i)
+        pyautogui.press(i)
     
     password = driver.find_element_by_name('password')
     password.clear()
@@ -21,6 +23,14 @@ def login(driver,MYUSERNAME,MYPASSWORD):
     
     driver.find_element_by_css_selector('button[type=submit]').click()
 
+    try:
+        warning_message = driver.find_element(By.ID,"slfErrorAlert")
+        print("Warning message found.Cannot enter.")
+        driver.quit()
+        exit()
+    except:
+        print("No warnings while entering.")
+        
 def SaveInfo(driver,choice):
     time.sleep(my_sleep_time)
     try:
@@ -188,32 +198,41 @@ def follow(driver,choice,WEBSITE_LINK,FOLLOWING_ACCOUNT_USERNAME_LIST):
                 except:
                     print("Error occured trying to follow the account.")
                     
-def follow_random(driver,follow_choice,target_account):
+def follow_random(driver,follow_choice,target_account,follow_amount):
     if(follow_choice):
         search_bar(driver,target_account)
-        driver.find_element_by_xpath('/html/body/div[1]/section/main/div/header/section/ul/li[2]').click()
+        time.sleep(my_sleep_time)
+        #Followers button
+        #driver.find_element_by_xpath('/html/body/div[1]/section/main/div/header/section/ul/li[2]').click()
+        driver.find_element_by_partial_link_text('followers').click()
         
         #popup = driver.find_element_by_xpath("//*[name()='div'][@role='dialog']")
         
         #Popup without heading
         popup = driver.find_element_by_xpath("//*[name()='div'][@class='isgrP']")
         
-        popup = driver.find_element_by_xpath("/html/body/div[5]/div/div/div[2]")
+        #popup = driver.find_element_by_xpath("/html/body/div[5]/div/div/div[2]")
         print('popup found')
         
-        last_ht,ht =0,1
-        while last_ht != ht:
-            last_ht = ht
-            time.sleep(1)
-            print("Script about start")
-            ht = driver.execute_script("""
-                arguments[0].scrollTo(0,arguments[0].scrollHeight);
-                return arguments[0].scrollHeight;
-                                       """,popup) 
-            button = driver.find_element_by_xpath("//*[name()='div'][@class='Pkbci']")
-            print("button found.")
-            print("script executed")       
-  
+        
+        time.sleep(my_sleep_time)
+        driver.execute_script('arguments[0].scrollTop = arguments[0].scrollHeight',popup)
+        
+        follow_buttons_clicked = 0
+        time.sleep(my_sleep_time)
+        follow_buttons = driver.find_elements_by_xpath("//*[name()='button'][@class='sqdOP  L3NKy   y3zKF     ']")
+        
+        
+        for follow_button in follow_buttons:
+            time.sleep(my_sleep_time)
+            follow_button.click()
+            follow_buttons_clicked += 1
+            if(follow_buttons_clicked%5==0):
+               driver.execute_script('arguments[0].scrollTop = arguments[0].scrollHeight',popup)
+            if(follow_amount == follow_buttons_clicked-1):
+                break
+        time.sleep(my_sleep_time)
+        
 def new_message(driver):
     driver.implicitly_wait(10)
     try:

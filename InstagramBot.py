@@ -17,7 +17,7 @@ n = NUMBER_OF_POSTS
 post_available = False
 
 driver = webdriver.Chrome(CHROME_DRIVER_PATH)
-driver.get(WEBSITE_LINK)
+driver.get(LOGIN_LINK)
 
 
 
@@ -42,7 +42,7 @@ try:
     
     #Follow People from the input list.
     follow(driver,FOLLOW_CHOICE,WEBSITE_LINK,FOLLOWING_ACCOUNT_USERNAME_LIST)
-    follow_random(driver,random_follow_choice,follow_random_target_account)
+    follow_random(driver,random_follow_choice,follow_random_target_account,follow_amount)
     
     #Message
     message(driver,MESSAGE_CHOICE,GROUP_CHAT_CHOICE,MESSAGE_USER_TARGET,MY_MESSAGE)
@@ -56,8 +56,8 @@ try:
 except:
     print("Some error occured.")
 
-#TODO: To find people you are following but do not follow you back.
-
+#TODO: To find people you are following but do not follow you back.Just print the list.Dont unfollow.Or else verified accounts will also be unfollowed.
+#following_button = driver.find_elements_by_xpath("//*[name()='button'][@class='sqdOP  L3NKy    _8A5w5    ']")
 #driver.quit()
 print("Driver quit.")
 exit()
