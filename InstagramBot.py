@@ -57,6 +57,12 @@ except:
     print("Some error occured.")
 
 #TODO: To find people you are following but do not follow you back.Just print the list.Dont unfollow.Or else verified accounts will also be unfollowed.
+#TODO2:Use default folder to bypass login
+
+
+
+
+
 #following_button = driver.find_elements_by_xpath("//*[name()='button'][@class='sqdOP  L3NKy    _8A5w5    ']")
 #driver.quit()
 print("Driver quit.")
