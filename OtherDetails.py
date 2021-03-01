@@ -1,11 +1,11 @@
 from random import randrange
-SAVE_CHOICE = False
-NOTIFY_CHOICE = False
+SAVE_CHOICE = True
+NOTIFY_CHOICE = True
 
 FOLLOW_CHOICE = False
 FOLLOWING_ACCOUNT_USERNAME_LIST = []
 
-random_follow_choice = True
+random_follow_choice = False
 follow_random_target_account = 'instagram'
 follow_amount = 10
 
@@ -20,5 +20,5 @@ GROUP_CHAT_CHOICE = False
 MESSAGE_USER_TARGET = ["selenagomez"]
 MY_MESSAGE = "hi"
 
-my_sleep_time = randrange(1,3)
+my_sleep_time = randrange(1,2)
 

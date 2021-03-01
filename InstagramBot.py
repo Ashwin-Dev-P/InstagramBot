@@ -10,13 +10,22 @@ import pyautogui
 
 #Variables and constants
 LOGIN_LINK = "http://instagram.com/accounts/login"
+#LOGIN_LINK = "http://instagram.com/"
 WEBSITE_LINK = "http://instagram.com/"
 CHROME_DRIVER_PATH = "C:\Program Files (x86)\chromedriver.exe"
 n = NUMBER_OF_POSTS
 
 post_available = False
 
-driver = webdriver.Chrome(CHROME_DRIVER_PATH)
+options = webdriver.ChromeOptions()
+options.add_argument('--user-data-dir=/Users/ashwi/AppData/Local/Google/Chrome/User Data/Default')
+options.add_argument('profile-directory=Default')
+
+driver = webdriver.Chrome(executable_path=CHROME_DRIVER_PATH,options=options)
+
+#Pressing f6 thrice will unselect the address bar in the google chrome browser.
+pyautogui.press('f6',presses=3)
+
 driver.get(LOGIN_LINK)
 
 
@@ -24,19 +33,21 @@ driver.get(LOGIN_LINK)
 #MAIN PROGRAM STARTS HERE
 try:
     #Login
-    login(driver,MYUSERNAME,MYPASSWORD)
+    try:
+        login(driver,MYUSERNAME,MYPASSWORD)
 
-    #Save login info
-    SaveInfoPopUpAppears = SaveInfo(driver,SAVE_CHOICE)
+        #Save login info
+        SaveInfoPopUpAppears = SaveInfo(driver,SAVE_CHOICE)
 
-    #Turn notifications off.
-    NotifyPopUpAppears = TurnOnNotificationPopUp(driver,NOTIFY_CHOICE)
+        #Turn notifications off.
+        NotifyPopUpAppears = TurnOnNotificationPopUp(driver,NOTIFY_CHOICE)
 
-    if(not SaveInfoPopUpAppears):
-        print('Entered save info again1.')
-        SaveInfo(driver,SAVE_CHOICE)
-        print('Entered save info again2.')
-
+        if(not SaveInfoPopUpAppears):
+            print('Entered save info again1.')
+            SaveInfo(driver,SAVE_CHOICE)
+            print('Entered save info again2.')
+    except:
+        print("Login procedures skipped.")
     #Like n post from a target account
     Like_Post(driver,LIKE_POST_CHOICE,TARGET_ACCOUNT_USERNAME,n)
     
@@ -45,6 +56,7 @@ try:
     follow_random(driver,random_follow_choice,follow_random_target_account,follow_amount)
     
     #Message
+    
     message(driver,MESSAGE_CHOICE,GROUP_CHAT_CHOICE,MESSAGE_USER_TARGET,MY_MESSAGE)
     #logout(driver)
     #open_new_tab(driver)
@@ -52,12 +64,20 @@ try:
     #close_tab(driver)
     #close_tab(driver)
     #close_window(driver)
-    
+    try:
+        #my_account(driver)
+        #following(driver)
+        driver.get(WEBSITE_LINK+"cristiano/")
+        c = get_followers_count(driver)
+        print(c)
+    except:
+        print("Not working.")
+        
 except:
     print("Some error occured.")
 
 #TODO: To find people you are following but do not follow you back.Just print the list.Dont unfollow.Or else verified accounts will also be unfollowed.
-#TODO2:Use default folder to bypass login
+
 
 
 

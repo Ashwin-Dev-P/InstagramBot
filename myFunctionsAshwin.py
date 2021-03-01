@@ -86,6 +86,81 @@ def search_bar(driver,myInput):
     account.click()
     print("Account clicked")
     
+def my_account(driver):
+    time.sleep(my_sleep_time)
+    account_button = driver.find_element_by_xpath("//*[name()='span'][@class='_2dbep qNELH']")
+    print("Account button")
+    account_button.click()
+    print("account button clicked.")
+    
+    time.sleep(my_sleep_time)
+    
+    #Xpaths for my profile link.
+    xpath1 = "/html/body/div[1]/section/nav/div[2]/div/div/div[3]/div/div[5]/div[2]/div[2]/div[2]/a[1]/div/div[2]/div/div/div/div"
+    
+    #This xpath selects the first sub division within the popup which popups when the account_button is clicked.
+    xpath2 = "//*[name()='a'][@class='-qQT3']"
+    
+    
+    profile_button = driver.find_element_by_xpath(xpath2)
+    print("Profile button found")
+    
+    profile_button.click()
+    print("Profile button clicked.")
+    
+def get_followers_count(driver):
+    print("Entered def")
+    number_of_followers = driver.find_elements_by_class_name('g47SY ')[1]
+    number_of_followers = number_of_followers.get_attribute("title")
+    followers_count = " "
+    for i in number_of_followers:
+        if(i.isdigit()):
+            followers_count = followers_count + str(i)
+    #print("number of followers ="+number_of_followers.text)
+    print("number of followers ="+followers_count)
+    followers_count = int(followers_count)
+    return followers_count
+
+    
+def following(driver):
+    driver.get("https://instagram.com/my_spam_bot")
+    number_of_following = 4
+    time.sleep(my_sleep_time)
+    following_link = driver.find_element_by_partial_link_text('following')
+    print("Following link found")
+    following_link.click()
+    print("Following link clicked.")
+    
+    time.sleep(my_sleep_time)
+    scrollable_popup = driver.find_element_by_class_name("isgrP")
+    """
+    #My following list with both following and suggested accounts link.
+    following_list_portion_with_suggested_accounts = driver.find_element_by_tag_name("ul")
+    
+    #Following list portion of the HTML.
+    #following_list_portion = driver.find_element_by_xpath("/html/body/div[5]/div/div/div[2]/ul")
+    following_list_portion = driver.find_element_by_class_name("jSC57")
+    print("Following list portion found.")
+    time.sleep(my_sleep_time)
+    
+    following_list_unextracted = following_list_portion.find_elements_by_class_name("FPmhX")
+    print("My following list found.")
+    """
+    following_list = []
+    
+    i=1
+    while(len(following_list) < number_of_following ):
+        
+        driver.execute_script('arguments[0].scrollTop = arguments[0].scrollHeight',scrollable_popup)
+        time.sleep(0.4)
+        following_list_unextracted = scrollable_popup.find_elements_by_class_name("FPmhX")
+        
+        for f in following_list_unextracted:
+            if(len(following_list) < number_of_following and f.text not in following_list):
+                following_list.append(f.text)
+                i+=1
+    print(following_list)
+    close_button(driver)
     
     
 def Like_Post(driver,choice,TARGET_ACCOUNT_USERNAME,n):
