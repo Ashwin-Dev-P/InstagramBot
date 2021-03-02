@@ -322,7 +322,7 @@ class InstagramBot:
     
     def following_who_does_not_follow_back(self,target_account):
         print("Find the accounts that don't follow back")
-        self.search_bar(target_account)
+        #self.search_bar(target_account)
         following = self.get_following(target_account)
         followers = self.get_followers(target_account)
         
@@ -333,6 +333,7 @@ class InstagramBot:
                 not_follow_back_accounts.append(i)
         print("The accounts that don't follow "+target_account+" back are:")
         print(not_follow_back_accounts)
+        return not_follow_back_accounts
         
                 
 
@@ -475,6 +476,37 @@ class InstagramBot:
             self.close_button()
             time.sleep(my_sleep_time)
             
+    def unfollow(self,my_account):
+        print("Unfollowing people who don't follow back...")
+             
+        self.search_bar(my_account)
+        number_of_following = self.get_following_count(my_account)
+        if(number_of_following > 0):
+            target_list = self.following_who_does_not_follow_back(my_account)
+            
+            for username in target_list:
+                time.sleep(my_sleep_time)
+                self.search_bar(username)
+                time.sleep(my_sleep_time)
+                following_button = self.driver.find_element_by_xpath("//*[name()='span'][@aria-label='Following']")
+                print("Following button found.")
+                following_button.click()
+                print("Following button clicked.")
+                
+                time.sleep(my_sleep_time)
+                Unfollow_button = self.driver.find_element_by_xpath("//*[name()='button'][@class='aOOlW -Cab_   ']")
+                print("Unfollow button found.")
+                Unfollow_button.click()
+                print("Unfollow button clicked.")
+                time.sleep(my_sleep_time)
+            home = self.driver.find_element_by_xpath("//*[name()='svg'][@aria-label='Home']")
+            print("Home svg found.")
+            home.click()
+            print("Home svg clicked.")
+        else:
+            print("Your following count is zero already.")  
+            
+                      
     def accept_follow_request(self):
         print("Accepting follow requests...")
         time.sleep(my_sleep_time)
@@ -635,6 +667,19 @@ class InstagramBot:
                     self.new_message()
             self.close_button()
             
+    def profile_pic(self,user):
+        print("Get profile pic")
+        time.sleep(my_sleep_time)
+        self.search_bar(user)
+        
+        time.sleep(my_sleep_time)
+        img = self.driver.find_element_by_tag_name('img')
+        print("Img tag found")
+        src = img.get_attribute('src')
+        print("Src of the image tag found.")
+        print("Source="+src)
+        self.driver.get(src)
+            
     def logout(self):
         account_button = self.driver.find_element_by_xpath("//*[name()='span'][@class='_2dbep qNELH']")
         print("account button found")
@@ -683,10 +728,14 @@ try:
     #bot.get_followers("my_spam_bot")
     #bot.following_who_does_not_follow_back('my_spam_bot')
     #bot.get_following("my_spam_bot")
-    bot.accept_follow_request()
+    #bot.accept_follow_request()
     
-    #TODO:Unfollow
+    
+    
+    #bot.unfollow(MYUSERNAME)
     #TODO:Check feed and like and comment.
+    #TODO:View profile pic
+    bot.profile_pic("cristiano")
     
 except:  
     print("Some error occured.")
