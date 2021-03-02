@@ -232,34 +232,111 @@ class InstagramBot:
         print("Getting following list for "+target_account+" ...")
         
         time.sleep(my_sleep_time)
-        self.search_bar(target_account)
+        
         number_of_following = self.get_following_count(target_account)
-        
-        time.sleep(my_sleep_time)
-        following_link = self.driver.find_element_by_partial_link_text('following')
-        print("Following link found")
-        following_link.click()
-        print("Following link clicked.")
-        
-        time.sleep(my_sleep_time)
-        scrollable_popup = self.driver.find_element_by_class_name("isgrP")
         following_list = []
-        
-        i=1
-        while(len(following_list) < number_of_following ):
+        if(number_of_following != 0):
+            time.sleep(my_sleep_time)
+            following_link = self.driver.find_element_by_partial_link_text('following')
+            print("Following link found")
+            following_link.click()
+            print("Following link clicked.")
             
-            self.driver.execute_script('arguments[0].scrollTop = arguments[0].scrollHeight',scrollable_popup)
-            time.sleep(0.4)
-            following_list_unextracted = scrollable_popup.find_elements_by_class_name("FPmhX")
+            time.sleep(my_sleep_time)
+            scrollable_popup = self.driver.find_element_by_class_name("isgrP")
+            print("Scrollable popup found.")
             
-            for f in following_list_unextracted:
-                if(len(following_list) < number_of_following and f.text not in following_list):
-                    following_list.append(f.text)
-                    i+=1
-        print("Following list of "+target_account)
-        print(following_list)
-        self.close_button()
+            
+            
+            i=1
+            while(len(following_list) < number_of_following ):
+                
+                self.driver.execute_script('arguments[0].scrollTop = arguments[0].scrollHeight',scrollable_popup)
+                time.sleep(0.4)
+                following_list_unextracted = scrollable_popup.find_elements_by_class_name("FPmhX")
+                
+                for f in following_list_unextracted:
+                    if(len(following_list) < number_of_following and f.text not in following_list):
+                        following_list.append(f.text)
+                        i+=1
+            print("Following list of "+target_account)
+            print(following_list)
+            
+            
+            #Verified accounts
+            scrollable_popup = self.driver.find_element_by_class_name("isgrP")
+            print("Scrollable popup refound.")
+            
+            try:
+                verified_accounts = scrollable_popup.find_elements_by_xpath("//*[name()='span'][@title='Verified']")
+                print("Verified accounts found.")
+                
+                verified_accounts_count = 0
+                for i in verified_accounts:
+                    verified_accounts_count = verified_accounts_count + 1
+                print("Verified accounts count= "+str(verified_accounts_count))
+            except:
+                print(target_account+" is following no verified account.")
+                
+                
+                
+            self.close_button()
+            print("Popup closed.")
         return following_list
+    
+    def get_followers(self,target_account):
+        print("Getting followers of "+target_account+" ...")
+        time.sleep(my_sleep_time)
+        
+        
+        number_of_followers = self.get_followers_count(target_account)
+        print("Followers count found.")
+        print("Followers count of "+str(target_account)+" is "+str(number_of_followers))
+        
+        followers_list = []
+        if(number_of_followers != 0):
+            followers_link = self.driver.find_element_by_partial_link_text('followers')
+            print("Followers link found.")
+            
+            followers_link.click()
+            print("Followrs link clicked.")
+            
+            scrollable_popup = self.driver.find_element_by_class_name("isgrP")
+            
+            
+            i=1
+            while(len(followers_list) < number_of_followers ):
+                
+                self.driver.execute_script('arguments[0].scrollTop = arguments[0].scrollHeight',scrollable_popup)
+                time.sleep(0.4)
+                followers_list_unextracted = scrollable_popup.find_elements_by_class_name("FPmhX")
+                
+                for f in followers_list_unextracted:
+                    if(len(followers_list) < number_of_followers and f.text not in followers_list):
+                        followers_list.append(f.text)
+                        i+=1
+            print("Followers list of "+target_account)
+            print(followers_list)
+            self.close_button()
+        return followers_list
+    
+    def following_who_does_not_follow_back(self,target_account):
+        print("Find the accounts that don't follow back")
+        self.search_bar(target_account)
+        following = self.get_following(target_account)
+        followers = self.get_followers(target_account)
+        
+        not_follow_back_accounts = []
+        
+        for i in following:
+            if(i not in followers):
+                not_follow_back_accounts.append(i)
+        print("The accounts that don't follow "+target_account+" back are:")
+        print(not_follow_back_accounts)
+        
+                
+
+        
     
     def Like_Post(self,choice,TARGET_ACCOUNT_USERNAME,n):
         if(choice and n>0):
@@ -398,27 +475,47 @@ class InstagramBot:
             self.close_button()
             time.sleep(my_sleep_time)
             
-    def next(self):
-        self.driver.implicitly_wait(10)
-        Next = self.driver.find_element_by_xpath("//*[name()='button'][@class='sqdOP yWX7d    y3zKF   cB_4K  ']")
-        Next.click()
-        
-    def send_message(self,message):
+    def accept_follow_request(self):
+        print("Accepting follow requests...")
         time.sleep(my_sleep_time)
-        self.driver.implicitly_wait(10)
-        message_textarea = self.driver.find_element_by_tag_name('textarea')
         
-        #message_textarea = driver.find_element_by_xpath('//*input[@placeholder="Message..." and not(@disabled)]')
-        print("message area found")
-        message_textarea.click()
-        print("message area clicked")
-        message_textarea.clear()
-        print("message area ready.")
+        activity_feed = self.driver.find_element_by_xpath("//*[name()='svg'][@aria-label='Activity Feed']")
+        print("Activity feed svg found.")
+        activity_feed.click()
+        print("Activity feed svg click.")
         
-        self.type(message)
-        
-        pyautogui.press('enter')
+        try:
+            chevron_icon = self.driver.find_element_by_xpath("//*[name()='svg'][@aria-label='Chevron icon to see all Follow Requests']")
+            print("Chevron icon found.")
+            chevron_icon.click()
+            print("Checron icon clicked.")
             
+            scrollable_popup = self.driver.find_element_by_xpath("//*[name()='div'][@class='f7Bj3']")
+            print("Scrollable popup found.")
+            blue_buttons = scrollable_popup.find_elements_by_xpath("//*[name()='button'][@class='sqdOP  L3NKy   y3zKF     ']")
+            
+            try:
+                c=0
+                while(True):
+                    self.driver.execute_script('arguments[0].scrollTop = arguments[0].scrollHeight',scrollable_popup)
+                    c += 1
+                    if(c == 6):
+                        break
+            except:
+                print("Scrollable popup scrolled as much as possible.")
+
+            confirm_buttons_count = 0
+            for blue_button in blue_buttons:
+                if(blue_button.text == "Confirm"):
+                    confirm_buttons_count += 1
+                    blue_button.click()
+            print("Confirm buttons count= "+str(confirm_buttons_count))
+            print("Accepted all follow requests.")
+        except:
+            print("No follow requests recieved or some other error occured.")
+
+
+        
     def new_message(self):
         self.driver.implicitly_wait(10)
         try:
@@ -445,6 +542,29 @@ class InstagramBot:
         print('query box clicked.')
         queryBox.clear()
         print('query box cleared.')
+               
+    def next(self):
+        self.driver.implicitly_wait(10)
+        Next = self.driver.find_element_by_xpath("//*[name()='button'][@class='sqdOP yWX7d    y3zKF   cB_4K  ']")
+        Next.click()
+        
+    def send_message(self,message):
+        time.sleep(my_sleep_time)
+        self.driver.implicitly_wait(10)
+        message_textarea = self.driver.find_element_by_tag_name('textarea')
+        
+        #message_textarea = driver.find_element_by_xpath('//*input[@placeholder="Message..." and not(@disabled)]')
+        print("message area found")
+        message_textarea.click()
+        print("message area clicked")
+        message_textarea.clear()
+        print("message area ready.")
+        
+        self.type(message)
+        
+        pyautogui.press('enter')
+            
+    
         
     def message(self,choice,group_chat,user_list,message):
         if(choice):
@@ -560,11 +680,18 @@ try:
     bot.follow(FOLLOW_CHOICE,FOLLOWING_ACCOUNT_USERNAME_LIST)
     bot.follow_random(random_follow_choice,follow_random_target_account,follow_amount)
     bot.message(MESSAGE_CHOICE,GROUP_CHAT_CHOICE,MESSAGE_USER_TARGET,MY_MESSAGE)
+    #bot.get_followers("my_spam_bot")
+    #bot.following_who_does_not_follow_back('my_spam_bot')
+    #bot.get_following("my_spam_bot")
+    bot.accept_follow_request()
+    
+    #TODO:Unfollow
+    #TODO:Check feed and like and comment.
     
 except:  
     print("Some error occured.")
     
-bot.close_tab()
+#bot.close_tab()
 print("Python program exited.")
 exit()
         
