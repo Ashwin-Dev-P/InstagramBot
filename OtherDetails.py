@@ -9,7 +9,7 @@ random_follow_choice = False
 follow_random_target_account = '#followforfollow'
 follow_amount = 30
 
-accept_follow_requests_choice = True
+accept_follow_requests_choice = False
 
 #Liking account posts
 LIKE_POST_CHOICE = False

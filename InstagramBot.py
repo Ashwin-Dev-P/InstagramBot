@@ -320,10 +320,11 @@ class InstagramBot:
                 print("Followers link found.")
                 
                 followers_link.click()
-                print("Followrs link clicked.")
+                print("Followers link clicked.")
                 
+                time.sleep(my_sleep_time)
                 scrollable_popup = self.driver.find_element_by_class_name("isgrP")
-                
+                print("Scrollable popup found.")
                 
                 i=1
                 while(len(followers_list) < number_of_followers ):
@@ -813,6 +814,7 @@ try:
     bot.follow_random(random_follow_choice,follow_random_target_account,follow_amount)
     bot.message(MESSAGE_CHOICE,GROUP_CHAT_CHOICE,MESSAGE_USER_TARGET,MY_MESSAGE)
     #bot.get_followers("my_spam_bot")
+    #bot.search_bar("my_spam_bot")
     #bot.following_who_does_not_follow_back('my_spam_bot')
     #bot.get_following("my_spam_bot")
     bot.accept_follow_request(accept_follow_requests_choice)
