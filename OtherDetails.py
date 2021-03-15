@@ -1,5 +1,5 @@
 from random import randrange
-SAVE_CHOICE = True
+SAVE_CHOICE = False
 NOTIFY_CHOICE = True
 
 FOLLOW_CHOICE = False
